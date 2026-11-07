@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Live Expense</string>
+    <string name="prompt_channel_name">Payment prompts</string>
+    <string name="prompt_not_an_expense">Not an expense</string>
+    <string name="prompt_other">Other…</string>
+    <string name="prompt_change">Change</string>
+    <string name="confirmation_channel_name">Saved confirmations</string>
+</resources>
