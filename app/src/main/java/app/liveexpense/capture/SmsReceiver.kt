@@ -8,7 +8,6 @@ import app.liveexpense.LiveExpenseApp
 import app.liveexpense.prompt.PaymentPrompt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SmsReceiver : BroadcastReceiver() {
@@ -24,19 +23,13 @@ class SmsReceiver : BroadcastReceiver() {
         val pending = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                // No delay to go after the SMS app's banner: on the S23 its Brief pop-up covers ours anyway,
+                // and showing at once leaves ours a few seconds before that pop-up opens.
                 val prompt = app.expenses.recordSms(sender, body, first.timestampMillis)
-                if (prompt != null) {
-                    delay(PROMPT_DELAY_MS)
-                    PaymentPrompt.show(app, prompt)
-                }
+                if (prompt != null) PaymentPrompt.show(app, prompt)
             } finally {
                 pending.finish()
             }
         }
-    }
-
-    private companion object {
-        // The SMS app posts its own banner for the same message, and a banner can cover ours. Going last keeps ours up.
-        const val PROMPT_DELAY_MS = 2_000L
     }
 }
